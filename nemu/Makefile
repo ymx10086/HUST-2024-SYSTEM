@@ -1,8 +1,8 @@
 NAME = nemu
 
 ifneq ($(MAKECMDGOALS),clean) # ignore check for make clean
-# ISA ?= x86
-ISA ?= riscv32
+ISA ?= x86
+# ISA ?= riscv32
 ISAS = $(shell ls src/isa/)
 $(info Building $(ISA)-$(NAME))
 
