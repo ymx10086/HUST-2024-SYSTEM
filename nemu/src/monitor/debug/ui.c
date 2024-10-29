@@ -38,6 +38,16 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_si(char *args){
+  char *steps = strtok(args, " ");
+  int n = 1;
+  if(steps != NULL){
+    n = atoi(steps); 
+  }
+  cpu_exec(n);
+  return 0;
+}
+
 static struct {
   char *name;
   char *description;
@@ -48,6 +58,7 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
 
   /* TODO: Add more commands */
+  { "si", "Let the program execute one instruction at a time for N instructions before pausing execution, where N is not specified, the default value is 1.", cmd_si}
 
 };
 
