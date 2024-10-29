@@ -8,6 +8,9 @@ const char *regsl[] = {
 };
 
 void isa_reg_display() {
+  for (int i = 0; i < 32; i++) {
+    printf("%4s  0x%08x  %8d\n", regsl[i], cpu.gpr[i]._32, cpu.gpr[i]._32);
+  }
 }
 
 uint32_t isa_reg_str2val(const char *s, bool *success) {
