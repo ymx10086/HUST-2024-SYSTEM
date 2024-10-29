@@ -46,6 +46,8 @@ static int cmd_si(char *args){
   return 0;
 }
 
+static int cmd_info(char *args);
+
 static struct {
   char *name;
   char *description;
@@ -59,6 +61,23 @@ static struct {
   { "si", "Let the program execute one instruction at a time for N instructions before pausing execution, where N is not specified, the default value is 1.", cmd_si}
 
 };
+
+static int cmd_info(char *args){
+  char *arg = strtok(NULL, " ");
+  if(arg == NULL){
+    printf("Unknown command, please input the subcmd!\n");
+  }
+  else if(strcmp(arg, "r") == 0){
+    isa_reg_display();
+  }
+  else if(strcmp(arg, "w") == 0){
+
+  }
+  else{
+    printf("Unknown command, please check the subcmd!\n");
+  }
+  return 0;
+}
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
 
