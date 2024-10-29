@@ -60,7 +60,8 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
 
   /* TODO: Add more commands */
-  { "si", "Let the program execute one instruction at a time for N instructions before pausing execution, where N is not specified, the default value is 1.", cmd_si}
+  { "si", "Let the program execute one instruction at a time for N instructions before pausing execution, where N is not specified, the default value is 1.", cmd_si},
+  { "info", "Print Register State && Print Monitor Point Information"}
 
 };
 
