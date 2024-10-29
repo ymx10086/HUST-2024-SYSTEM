@@ -39,9 +39,9 @@ static int cmd_q(char *args) {
 static int cmd_help(char *args);
 
 static int cmd_si(char *args){
-  char *steps = strtok(args, " ");
+  char *pcs = strtok(args, " ");
   int n = 1;
-  if(!steps) n = atoi(steps);
+  if(!pcs) n = atoi(pcs);
   cpu_exec(n);
   return 0;
 }
