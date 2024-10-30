@@ -59,7 +59,8 @@ static struct {
   /* TODO: Add more commands */
   { "si", "Let the program execute one instruction at a time for N instructions before pausing execution, where N is not specified, the default value is 1.", cmd_si},
   { "info", "Print Register State && Print Monitor Point Information", cmd_info},
-  { "x", "Calculate the value of the expression EXPR and output the result as the starting memory address in hexadecimal format, continuously for N 4-byte values.", cmd_x}
+  { "x", "Calculate the value of the expression EXPR and output the result as the starting memory address in hexadecimal format, continuously for N 4-byte values.", cmd_x},
+  // { "p" , " Usage: p EXPR. Calculate the value of the expression EXPR." , cmd_p},
 
 };
 
