@@ -121,6 +121,13 @@ static bool make_token(char *e) {
             ++nr_token;
             break;
           }
+          case TK_REG:{
+            tokens[nr_token].type = 'r';  
+            strncpy(tokens[nr_token].str, substr_start + 1, substr_len - 1);
+            tokens[nr_token].str[substr_len-1] = '\0';
+            ++nr_token;
+            break;
+          }
 
           // brackets
           case '(':
@@ -136,14 +143,6 @@ static bool make_token(char *e) {
           case TK_AND:
           case TK_OR:{
             tokens[nr_token++].type = rules[i].token_type;
-            break;
-          }
-
-          case TK_REG:{
-            tokens[nr_token].type = 'r';  
-            strncpy(tokens[nr_token].str, substr_start + 1, substr_len - 1);
-            tokens[nr_token].str[substr_len-1] = '\0';
-            ++nr_token;
             break;
           }
           default: TODO();
