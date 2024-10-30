@@ -157,7 +157,6 @@ static bool make_token(char *e) {
       printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
       return false;
     }
-    printf("Position: %d\n", position);
   }
 
   return true;
@@ -169,7 +168,7 @@ uint32_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
-  printf("Finish the expression!\n");
+  // printf("Finish the expression!\n");
   /* TODO: Insert codes to evaluate the expression. */
   TODO();
 
