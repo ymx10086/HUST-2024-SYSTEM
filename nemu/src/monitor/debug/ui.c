@@ -72,13 +72,13 @@ static int cmd_x(char *args) {
   }
   int n = atoi(N);
   paddr_t addr = strtol(address, NULL, 16);
-  for(int i=0; i<n; i++) {
+  for(int i = 0; i < n; i++) {
       printf("0x%08x: ", addr);
-      for(int j=0; j<4; j++) {
-          printf("%02x ", paddr_read(addr, 1));
-          addr++;
-      }
-      printf("\n");
+      // for(int j=0; j<4; j++) {
+      //     printf("%02x ", paddr_read(addr, 1));
+      //     addr++;
+      // }
+      // printf("\n");
   }
   return 0;
 }
