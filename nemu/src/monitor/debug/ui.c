@@ -41,15 +41,11 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
-static int cmd_si(char *args){
-  char *pcs = strtok(args, " ");
-  int n = 1;
-  if(!pcs) n = atoi(pcs);
-  cpu_exec(n);
-  return 0;
-}
+static int cmd_si(char *args);
 
 static int cmd_info(char *args);
+
+static int cmd_x(char *args);
 
 static struct {
   char *name;
@@ -62,9 +58,30 @@ static struct {
 
   /* TODO: Add more commands */
   { "si", "Let the program execute one instruction at a time for N instructions before pausing execution, where N is not specified, the default value is 1.", cmd_si},
-  { "info", "Print Register State && Print Monitor Point Information", cmd_info}
+  { "info", "Print Register State && Print Monitor Point Information", cmd_info},
+  { "x", "Calculate the value of the expression EXPR and output the result as the starting memory address in hexadecimal format, continuously for N 4-byte values.", cmd_x}
 
 };
+
+static int cmd_x(char *args) { 
+  char *N = strtok(NULL, " ");
+  char *address = strtok(NULL, " ");
+  if(N == NULL || address == NULL){
+    printf("Unknown command, please input the N and the address!\n");
+    return 0;
+  }
+  int n = atoi(N);
+  paddr_t addr = strtol(address, NULL, 16);
+  for(int i=0; i<n; i++) {
+      printf("0x%08x: ", addr);
+      for(int j=0; j<4; j++) {
+          printf("%02x ", paddr_read(addr, 1));
+          addr++;
+      }
+      printf("\n");
+  }
+  return 0;
+}
 
 static int cmd_info(char *args){
   char *arg = strtok(NULL, " ");
@@ -74,6 +91,14 @@ static int cmd_info(char *args){
     // TODO: print watch point
   }
   else printf("Unknown command, please check the subcmd!\n");
+  return 0;
+}
+
+static int cmd_si(char *args){
+  char *pcs = strtok(NULL, " ");
+  int n = 1;
+  if(!pcs) n = atoi(pcs);
+  cpu_exec(n);
   return 0;
 }
 
