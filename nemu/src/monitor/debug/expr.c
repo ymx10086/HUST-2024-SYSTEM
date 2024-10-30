@@ -7,10 +7,16 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ
+  TK_NOTYPE = 256, TK_EQ,
 
   /* TODO: Add more token types */
-
+  TK_NEQ,
+  TK_NUM,
+  TK_HEX_NUM,
+  TK_AND,
+  TK_OR,
+  TK_REG,
+  TK_NOT
 };
 
 static struct rule {
@@ -24,7 +30,19 @@ static struct rule {
 
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
-  {"==", TK_EQ}         // equal
+  {"==", TK_EQ},        // equal
+  {"\\*", '*'},         // multiply
+  {"\\/", '/'},         // divide
+  {"\\-", '-'},         // minus
+  {"0x[0-9a-fA-F]+", TK_HEX_NUM}, // hex number
+  {"[0-9]+", TK_NUM},   // number
+  {"\\(", '('},         // left bracket
+  {"\\)", ')'},         // right bracket
+  {"&&", TK_AND},       // and
+  {"\\|\\|", TK_OR},    // or
+  {"\\$[0-9a-zA-Z]+", TK_REG}, // register
+  {"!=", TK_NEQ}  ,     // not equal
+  {"!", TK_NOT}         // no   
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -80,6 +98,54 @@ static bool make_token(char *e) {
          */
 
         switch (rules[i].token_type) {
+          case TK_NOTYPE:break;
+          case TK_NUM:{
+            if (substr_len > 32) { 
+              puts("The length of number is too long! "); 
+              return false;
+            }
+            tokens[nr_token].type = '0';
+            strncpy(tokens[nr_token].str,substr_start,substr_len);
+            tokens[nr_token].str[substr_len] = '\0';
+            ++nr_token;
+            break;
+          }
+          case TK_HEX_NUM:{
+            if (substr_len > 32) { 
+              puts("The length of number is too long!"); 
+              return false; 
+            }
+            tokens[nr_token].type = '6';
+            strncpy(tokens[nr_token].str, substr_start + 2, substr_len - 2);
+            tokens[nr_token].str[substr_len - 2] = '\0';
+            ++nr_token;
+            break;
+          }
+
+          // brackets
+          case '(':
+          case ')':
+
+          // operators
+          case '*':
+          case '/':
+          case '-':
+          case '+':
+          case TK_EQ:
+          case TK_NEQ:
+          case TK_AND:
+          case TK_OR:{
+            tokens[nr_token++].type = rules[i].token_type;
+            break;
+          }
+
+          case TK_REG:{
+            tokens[nr_token].type = 'r';  
+            strncpy(tokens[nr_token].str, substr_start + 1, substr_len - 1);
+            tokens[nr_token].str[substr_len-1] = '\0';
+            ++nr_token;
+            break;
+          }
           default: TODO();
         }
 
