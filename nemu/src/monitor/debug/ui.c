@@ -67,7 +67,7 @@ static struct {
 
 static int cmd_info(char *args){
   char *arg = strtok(NULL, " ");
-  if(arg == NULL){
+  if(!arg){
     printf("Unknown command, please input the subcmd!\n");
   }
   else if(strcmp(arg, "r") == 0){
