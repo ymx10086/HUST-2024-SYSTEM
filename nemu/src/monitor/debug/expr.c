@@ -141,11 +141,11 @@ static bool make_token(char *e) {
           case TK_EQ:
           case TK_NEQ:
           case TK_AND:
-          case TK_OR:{
+          case TK_OR:
+          default: {
             tokens[nr_token++].type = rules[i].token_type;
             break;
           }
-          default: TODO();
         }
 
         break;
