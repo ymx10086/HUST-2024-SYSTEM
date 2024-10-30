@@ -7,6 +7,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+// Location: ics2019_1/nemu/src/isa/riscv32/reg.c
 extern void isa_reg_display(void);
 
 void cpu_exec(uint64_t);
@@ -41,7 +42,7 @@ static int cmd_q(char *args) {
 static int cmd_help(char *args);
 
 static int cmd_si(char *args){
-  char *pcs = strtok(args, " ");
+  char *pcs = strtok(NULL, " ");
   int n = 1;
   if(!pcs) n = atoi(pcs);
   cpu_exec(n);
@@ -67,18 +68,12 @@ static struct {
 
 static int cmd_info(char *args){
   char *arg = strtok(NULL, " ");
-  if(!arg){
-    printf("Unknown command, please input the subcmd!\n");
-  }
-  else if(strcmp(arg, "r") == 0){
-    isa_reg_display();
-  }
+  if(!arg) printf("Unknown command, please input the subcmd!\n");
+  else if(strcmp(arg, "r") == 0) isa_reg_display();
   else if(strcmp(arg, "w") == 0){
-
+    // TODO: print watch point
   }
-  else{
-    printf("Unknown command, please check the subcmd!\n");
-  }
+  else printf("Unknown command, please check the subcmd!\n");
   return 0;
 }
 
