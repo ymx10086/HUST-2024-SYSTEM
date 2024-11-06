@@ -108,7 +108,7 @@ static bool make_token(char *e) {
               puts("The length of number is too long! "); 
               return false;
             }
-            // tokens[nr_token].type = '0';
+            tokens[nr_token].type = rules[i].token_type;
             strncpy(tokens[nr_token].str,substr_start,substr_len);
             tokens[nr_token].str[substr_len] = '\0';
             ++nr_token;
@@ -119,14 +119,14 @@ static bool make_token(char *e) {
               puts("The length of number is too long!"); 
               return false; 
             }
-            // tokens[nr_token].type = '6';
+            tokens[nr_token].type = rules[i].token_type;
             strncpy(tokens[nr_token].str, substr_start + 2, substr_len - 2);
             tokens[nr_token].str[substr_len - 2] = '\0';
             ++nr_token;
             break;
           }
           case TK_REG:{
-            // tokens[nr_token].type = 'r';  
+            tokens[nr_token].type = rules[i].token_type;  
             strncpy(tokens[nr_token].str, substr_start + 1, substr_len - 1);
             tokens[nr_token].str[substr_len-1] = '\0';
             ++nr_token;
