@@ -284,7 +284,6 @@ uint32_t eval(int start, int end, bool* success) {
       case TK_NEG:{
         printf("%d", -val2);
         return -val2;
-        
       } 
       case TK_POINT: return paddr_read(val2, 4);
       default: assert(0); break;
@@ -314,6 +313,7 @@ uint32_t expr(char *e, bool *success) {
   }
 
   uint32_t result = eval(0, nr_token - 1, success);
+  printf("Results : %d\n", result);
   if (!(*success)) {
     printf("Expression evaluation failed...\n");
   }
