@@ -277,10 +277,10 @@ uint32_t eval(int start, int end, bool* success) {
     }
   }
 
-  return 0; // 默认返回值
+  return 0; 
 }
 
-// 解析表达式并计算结果
+// We assume that all results are of type uint32_t.
 uint32_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
