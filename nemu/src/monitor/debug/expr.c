@@ -255,6 +255,7 @@ uint32_t eval(int start, int end, bool* success) {
   }
 
   if (start == end) {
+    printf("TYPE : %d", tokens[start].type);
     // 只有一个 token，应该是数字或寄存器
     if (tokens[start].type == TK_NUM) {
       return strtol(tokens[start].str, NULL, 10);
