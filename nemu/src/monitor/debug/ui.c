@@ -69,7 +69,7 @@ static struct {
 static int cmd_p(char *args) {
   char *arg = strtok(NULL, "\0");
   bool success = true;
-  uint32_t result = expr(arg, &success);
+  int32_t result = expr(arg, &success);
   if(success) printf("%s = %u\n", arg, result);
   else printf("Invalid expression!\n");
   return 0;

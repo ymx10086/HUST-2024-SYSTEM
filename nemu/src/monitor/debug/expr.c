@@ -305,7 +305,7 @@ uint32_t expr(char *e, bool *success) {
   for (int i = 0; i < nr_token; i++) {
     if (tokens[i].type == '-' && (i == 0 || tokens[i-1].type == '(' || tokens[i-1].type == TK_EQ || tokens[i-1].type == TK_NEQ || tokens[i-1].type == '-')) {
       tokens[i].type = TK_NEG;
-      printf("TURN ONCE!\n");
+      // printf("TURN ONCE!\n");
     }
     if (tokens[i].type == '*' && (i == 0 || tokens[i-1].type == '+' || tokens[i-1].type == '-' || tokens[i-1].type == '*' || tokens[i-1].type == '/' || tokens[i-1].type == '(' || tokens[i-1].type == TK_EQ || tokens[i-1].type == TK_NEQ)) {
       tokens[i].type = TK_POINT;
@@ -313,7 +313,6 @@ uint32_t expr(char *e, bool *success) {
   }
 
   uint32_t result = eval(0, nr_token - 1, success);
-  printf("Results : %d\n", result);
   if (!(*success)) {
     printf("Expression evaluation failed...\n");
   }
