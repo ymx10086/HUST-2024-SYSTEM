@@ -229,7 +229,7 @@ int find_main_op(int start, int end) {
         default: current_priority = 10; break;
       }
 
-      if (current_priority < priority) {
+      if (current_priority <= priority) {
         op = i;
         priority = current_priority;
       }
