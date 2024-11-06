@@ -205,19 +205,16 @@ bool check_parentheses(int start, int end) {
 //   return 0;
 // }
 
-// 寻找表达式中的主要操作符
 int find_main_op(int start, int end) {
   int op = -1;
   int unpair = 0;
-  int priority = 10;  // 设定最低优先级
+  int priority = 10; 
 
-  // 遍历区间内的所有操作符，选择优先级最低的主操作符
   for (int i = start; i <= end; i++) {
     if (tokens[i].type == '(') unpair++;
     else if (tokens[i].type == ')') unpair--;
 
     if (unpair == 0) {
-      // 判断运算符的优先级，并更新主操作符的位置
       int current_priority = -1;
 
       switch (tokens[i].type) {
@@ -232,7 +229,6 @@ int find_main_op(int start, int end) {
         default: current_priority = 10; break;
       }
 
-      // 如果当前操作符优先级更低，则更新
       if (current_priority < priority) {
         op = i;
         priority = current_priority;
@@ -240,10 +236,8 @@ int find_main_op(int start, int end) {
     }
   }
 
-  if (op == -1) {
-    printf("Can't find main operator...\n");
-  }
-  
+  if (op == -1) printf("Can't find main operator...\n");
+  printf("OP: %d\n", op);
   return op;
 }
 
