@@ -169,6 +169,25 @@ static bool make_token(char *e) {
   return true;
 }
 
+bool check_parentheses(int start, int end) {
+    if (tokens[start].type != '(' || tokens[end].type != ')') {
+        return false;
+    }
+    int balance = 0;
+    for (int i = start + 1; i < end; i++) {
+        if (tokens[i].type == '(') {
+            balance++;
+        } else if (tokens[i].type == ')') {
+            balance--;
+        }
+
+        if (balance < 0) {
+            return false;
+        }
+    }
+    return balance == 0;
+}
+
 uint32_t expr(char *e, bool *success) {
   printf("%s\n", e);
   if (!make_token(e)) {
