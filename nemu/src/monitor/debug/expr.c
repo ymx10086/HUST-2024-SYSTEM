@@ -281,7 +281,11 @@ uint32_t eval(int start, int end, bool* success) {
       case TK_AND: return val1 && val2;
       case TK_OR: return val1 || val2;
       case TK_NOT: return !val2;
-      case TK_NEG: return -val2;
+      case TK_NEG:{
+        printf("%d", -val2);
+        return -val2;
+        
+      } 
       case TK_POINT: return paddr_read(val2, 4);
       default: assert(0); break;
     }
