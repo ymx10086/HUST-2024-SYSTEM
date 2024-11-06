@@ -237,11 +237,10 @@ int find_main_op(int start, int end) {
   }
 
   if (op == -1) printf("Can't find main operator...\n");
-  printf("OP: %d\n", op);
+  // printf("OP: %d\n", op);
   return op;
 }
 
-// 根据操作符计算结果
 uint32_t eval(int start, int end, bool* success) {
   if (start > end) {
     printf("Invalid sub-expression...\n");
@@ -249,8 +248,6 @@ uint32_t eval(int start, int end, bool* success) {
   }
 
   if (start == end) {
-    printf("TYPE : %d", tokens[start].type);
-    // 只有一个 token，应该是数字或寄存器
     if (tokens[start].type == TK_NUM) {
       return strtol(tokens[start].str, NULL, 10);
     } else if (tokens[start].type == TK_HEX_NUM) {
