@@ -264,7 +264,7 @@ uint32_t eval(int start, int end, bool* success) {
 
     int val1 = eval(start, op - 1, success);
     int val2 = eval(op + 1, end, success);
-    printf("VAL1 : %d, VAL2 : %d\n", val1, val2);
+    // printf("VAL1 : %d, VAL2 : %d\n", val1, val2);
     
     switch (tokens[op].type) {
       case '+': return val1 + val2;
@@ -282,7 +282,7 @@ uint32_t eval(int start, int end, bool* success) {
       case TK_OR: return val1 || val2;
       case TK_NOT: return !val2;
       case TK_NEG:{
-        printf("%d", -val2);
+        // printf("%d", -val2);
         return -val2;
       } 
       case TK_POINT: return paddr_read(val2, 4);
@@ -313,7 +313,6 @@ uint32_t expr(char *e, bool *success) {
   }
 
   uint32_t result = eval(0, nr_token - 1, success);
-  printf("Results : %d\n", result);
   if (!(*success)) {
     printf("Expression evaluation failed...\n");
   }
