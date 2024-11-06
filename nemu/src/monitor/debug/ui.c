@@ -49,6 +49,10 @@ static int cmd_x(char *args);
 
 static int cmd_p(char *args);
 
+static int cmd_w(char *args);
+
+static int cmd_d(char *args);
+
 static struct {
   char *name;
   char *description;
@@ -63,8 +67,36 @@ static struct {
   { "info", "Print Register State && Print Monitor Point Information", cmd_info},
   { "x", "Calculate the value of the expression EXPR and output the result as the starting memory address in hexadecimal format, continuously for N 4-byte values.", cmd_x},
   { "p" , " Usage: p EXPR. Calculate the value of the expression EXPR." , cmd_p},
-
+  { "w", "Set watchpoint", cmd_w},
+  { "d", "Delete watchpoint", cmd_d},
 };
+
+static int cmd_w(char *args) {
+  char *arg = strtok(NULL, " ");
+  if(arg == NULL){
+    printf("Unknown command, please input the expression!\n");
+    return 0;
+  }
+  WP* wp = new_wp(arg);
+  printf("Set watchpoint %d for %s\n", wp->NO, wp->expr);
+  return 0;
+}
+
+static int cmd_d(char *args) {
+  char *arg = strtok(NULL, " ");
+  if(arg == NULL){
+    printf("Unknown command, please input the watchpoint number!\n");
+    return 0;
+  }
+  int n = atoi(arg);
+  if(free_wp(n)){
+    printf("Delete watchpoint %d\n", n);
+  }
+  else{
+    printf("No watchpoint %d\n", n);
+  }
+  return 0;
+}
 
 static int cmd_p(char *args) {
   char *arg = strtok(NULL, "\0");
@@ -101,7 +133,7 @@ static int cmd_info(char *args){
   else if(strcmp(arg, "r") == 0) isa_reg_display();
   else if(strcmp(arg, "w") == 0){
     // TODO: print watch point
-
+    watchpoint_display();
   }
   else printf("Unknown command, please check the subcmd!\n");
   return 0;
