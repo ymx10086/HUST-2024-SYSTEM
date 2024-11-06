@@ -254,10 +254,8 @@ uint32_t eval(int start, int end, bool* success) {
       return 0;
     }
   } else if (check_parentheses(start, end)) {
-    // 去除括号进行递归计算
     return eval(start + 1, end - 1, success);
   } else {
-    // 找到主要操作符进行计算
     int op = find_main_op(start, end);
     if (op == -1) {
       printf("No main operator found...\n");
@@ -303,6 +301,7 @@ uint32_t expr(char *e, bool *success) {
   for (int i = 0; i < nr_token; i++) {
     if (tokens[i].type == '-' && (i == 0 || tokens[i-1].type == '(' || tokens[i-1].type == TK_EQ || tokens[i-1].type == TK_NEQ || tokens[i-1].type == '-')) {
       tokens[i].type = TK_NEG;
+      printf("TURN ONCE!\n");
     }
     if (tokens[i].type == '*' && (i == 0 || tokens[i-1].type == '+' || tokens[i-1].type == '-' || tokens[i-1].type == '*' || tokens[i-1].type == '/' || tokens[i-1].type == '(' || tokens[i-1].type == TK_EQ || tokens[i-1].type == TK_NEQ)) {
       tokens[i].type = TK_POINT;
