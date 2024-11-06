@@ -16,7 +16,9 @@ enum {
   TK_AND,
   TK_OR,
   TK_REG,
-  TK_NOT
+  TK_NOT,
+  TK_NEG,
+  TK_POINT
 };
 
 static struct rule {
@@ -188,15 +190,140 @@ bool check_parentheses(int start, int end) {
     return balance == 0;
 }
 
-uint32_t expr(char *e, bool *success) {
-  printf("%s\n", e);
-  if (!make_token(e)) {
-    *success = false;
+// uint32_t expr(char *e, bool *success) {
+//   printf("%s\n", e);
+//   if (!make_token(e)) {
+//     *success = false;
+//     return 0;
+//   }
+//   // printf("Finish the expression!\n");
+//   /* TODO: Insert codes to evaluate the expression. */
+//   TODO();
+
+//   return 0;
+// }
+
+// 寻找表达式中的主要操作符
+int find_main_op(int start, int end) {
+  int op = -1;
+  int unpair = 0;
+  int priority = 10;  // 设定最低优先级
+
+  // 遍历区间内的所有操作符，选择优先级最低的主操作符
+  for (int i = start; i <= end; i++) {
+    if (tokens[i].type == '(') unpair++;
+    else if (tokens[i].type == ')') unpair--;
+
+    if (unpair == 0) {
+      // 判断运算符的优先级，并更新主操作符的位置
+      int current_priority = -1;
+
+      switch (tokens[i].type) {
+        case '+': case '-': current_priority = 1; break;
+        case '*': case '/': current_priority = 2; break;
+        case TK_EQ: case TK_NEQ: current_priority = 3; break;
+        case TK_OR: current_priority = 4; break;
+        case TK_AND: current_priority = 5; break;
+        case TK_NOT: current_priority = 6; break;
+        case TK_POINT: current_priority = 7; break;
+        case TK_NEG: current_priority = 8; break;
+        default: current_priority = 10; break;
+      }
+
+      // 如果当前操作符优先级更低，则更新
+      if (current_priority < priority) {
+        op = i;
+        priority = current_priority;
+      }
+    }
+  }
+
+  if (op == -1) {
+    printf("Can't find main operator...\n");
+  }
+  
+  return op;
+}
+
+// 根据操作符计算结果
+uint32_t eval(int start, int end, bool* success) {
+  if (start > end) {
+    printf("Invalid sub-expression...\n");
     return 0;
   }
-  // printf("Finish the expression!\n");
-  /* TODO: Insert codes to evaluate the expression. */
-  TODO();
 
-  return 0;
+  if (start == end) {
+    // 只有一个 token，应该是数字或寄存器
+    if (tokens[start].type == TK_NUM) {
+      return strtol(tokens[start].str, NULL, 10);
+    } else if (tokens[start].type == TK_HEX_NUM) {
+      return strtol(tokens[start].str, NULL, 16);
+    } else if (tokens[start].type == TK_REG) {
+      return isa_reg_str2val(&(tokens[start].str[1]), success);
+    } else {
+      printf("Single token is not a valid number...\n");
+      return 0;
+    }
+  } else if (check_parentheses(start, end)) {
+    // 去除括号进行递归计算
+    return eval(start + 1, end - 1, success);
+  } else {
+    // 找到主要操作符进行计算
+    int op = find_main_op(start, end);
+    if (op == -1) {
+      printf("No main operator found...\n");
+      return 0;
+    }
+
+    int val1 = eval(start, op - 1, success);
+    int val2 = eval(op + 1, end, success);
+    
+    switch (tokens[op].type) {
+      case '+': return val1 + val2;
+      case '-': return val1 - val2;
+      case '*': return val1 * val2;
+      case '/': 
+        if (val2 == 0) {
+          printf("Division by zero error...\n");
+          assert(0);
+        }
+        return val1 / val2;
+      case TK_EQ: return val1 == val2;
+      case TK_NEQ: return val1 != val2;
+      case TK_AND: return val1 && val2;
+      case TK_OR: return val1 || val2;
+      case TK_NOT: return !val2;
+      case TK_NEG: return -val2;
+      case TK_POINT: return paddr_read(val2, 4);
+      default: assert(0); break;
+    }
+  }
+
+  return 0; // 默认返回值
+}
+
+// 解析表达式并计算结果
+uint32_t expr(char *e, bool *success) {
+  if (!make_token(e)) {
+    *success = false;
+    printf("Invalid tokens in expression...\n");
+    return 0;
+  }
+
+  // 转换负号和星号为 TK_NEG 和 TK_POINT
+  for (int i = 0; i < nr_token; i++) {
+    if (tokens[i].type == '-' && (i == 0 || tokens[i-1].type == '(' || tokens[i-1].type == TK_EQ || tokens[i-1].type == TK_NEQ || tokens[i-1].type == '-')) {
+      tokens[i].type = TK_NEG;
+    }
+    if (tokens[i].type == '*' && (i == 0 || tokens[i-1].type == '+' || tokens[i-1].type == '-' || tokens[i-1].type == '*' || tokens[i-1].type == '/' || tokens[i-1].type == '(' || tokens[i-1].type == TK_EQ || tokens[i-1].type == TK_NEQ)) {
+      tokens[i].type = TK_POINT;
+    }
+  }
+
+  uint32_t result = eval(0, nr_token - 1, success);
+  if (!(*success)) {
+    printf("Expression evaluation failed...\n");
+  }
+
+  return result;
 }
