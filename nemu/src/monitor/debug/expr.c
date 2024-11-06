@@ -187,19 +187,6 @@ bool check_parentheses(int start, int end) {
     return balance == 0;
 }
 
-// uint32_t expr(char *e, bool *success) {
-//   printf("%s\n", e);
-//   if (!make_token(e)) {
-//     *success = false;
-//     return 0;
-//   }
-//   // printf("Finish the expression!\n");
-//   /* TODO: Insert codes to evaluate the expression. */
-//   TODO();
-
-//   return 0;
-// }
-
 int find_main_op(int start, int end) {
   int op = -1;
   int unpair = 0;
@@ -238,7 +225,7 @@ int find_main_op(int start, int end) {
 
 uint32_t eval(int start, int end, bool* success) {
   if (start > end) {
-    printf("Invalid sub-expression...\n");
+    // printf("Invalid sub-expression...\n");
     return 0;
   }
 
@@ -300,8 +287,9 @@ uint32_t expr(char *e, bool *success) {
     printf("Invalid tokens in expression...\n");
     return 0;
   }
+  Log("Finish the expression!\n");
+  /* TODO: Insert codes to evaluate the expression. */
 
-  // 转换负号和星号为 TK_NEG 和 TK_POINT
   for (int i = 0; i < nr_token; i++) {
     if (tokens[i].type == '-' && (i == 0 || tokens[i-1].type == '(' || tokens[i-1].type == TK_EQ || tokens[i-1].type == TK_NEQ || tokens[i-1].type == '-')) {
       tokens[i].type = TK_NEG;
