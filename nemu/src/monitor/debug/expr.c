@@ -313,6 +313,7 @@ uint32_t expr(char *e, bool *success) {
   }
 
   uint32_t result = eval(0, nr_token - 1, success);
+  printf("Results : %d\n", result);
   if (!(*success)) {
     printf("Expression evaluation failed...\n");
   }
