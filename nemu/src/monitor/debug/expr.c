@@ -287,7 +287,7 @@ uint32_t expr(char *e, bool *success) {
     printf("Invalid tokens in expression...\n");
     return 0;
   }
-  Log("Finish the expression!\n");
+  Log("Finish the expression!");
   /* TODO: Insert codes to evaluate the expression. */
 
   for (int i = 0; i < nr_token; i++) {
