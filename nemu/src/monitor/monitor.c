@@ -2,6 +2,8 @@
 #include "monitor/monitor.h"
 #include <unistd.h>
 
+#ifdef UNDEBUG
+
 void init_log(const char *log_file);
 void init_isa();
 void init_regex();
@@ -112,3 +114,4 @@ int init_monitor(int argc, char *argv[]) {
 
   return is_batch_mode;
 }
+#endif
