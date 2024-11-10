@@ -38,8 +38,6 @@ void cpu_exec(uint64_t n) {
     default: nemu_state.state = NEMU_RUNNING;
   }
   for (; n > 0; n --) {
-    printf("N : %lu\n", n);
-    printf("N- : %d\n", (n - 1) > 0);
     __attribute__((unused)) vaddr_t ori_pc = cpu.pc;
 
     /* Execute one instruction, including instruction fetch,
@@ -52,6 +50,7 @@ void cpu_exec(uint64_t n) {
 
 #ifdef DEBUG
   if (g_nr_guest_instr < LOG_MAX) {
+    printf("EIP = 0x%08x\n", ori_pc);
     asm_print(ori_pc, seq_pc - ori_pc, n < MAX_INSTR_TO_PRINT);
   }
   else if (g_nr_guest_instr == LOG_MAX) {
