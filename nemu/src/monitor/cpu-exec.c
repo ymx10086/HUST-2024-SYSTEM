@@ -50,7 +50,6 @@ void cpu_exec(uint64_t n) {
 
 #ifdef DEBUG
   if (g_nr_guest_instr < LOG_MAX) {
-    // printf("EIP = 0x%08x\n", ori_pc);
     asm_print(ori_pc, seq_pc - ori_pc, n < MAX_INSTR_TO_PRINT);
   }
   else if (g_nr_guest_instr == LOG_MAX) {
