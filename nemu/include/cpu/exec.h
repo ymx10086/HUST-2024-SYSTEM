@@ -25,7 +25,6 @@ typedef struct {
 static inline uint32_t instr_fetch(vaddr_t *pc, int len) {
   uint32_t instr = vaddr_read(*pc, len);
 #ifdef DEBUG
-  printf("PC: 0x%08x: ", *pc);
   uint8_t *p_instr = (void *)&instr;
   int i;
   for (i = 0; i < len; i ++) {
