@@ -71,11 +71,8 @@ void cpu_exec(uint64_t n) {
     extern void device_update();
     device_update();
 #endif
-
-    if (nemu_state.state != NEMU_RUNNING){
-      printf("NN: Hit watchpoint at pc = 0x%08x\n", cpu.pc);
-      break;
-    } 
+    
+    if (nemu_state.state != NEMU_RUNNING) break;
   }
 
   switch (nemu_state.state) {
