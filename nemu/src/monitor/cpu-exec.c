@@ -71,7 +71,7 @@ void cpu_exec(uint64_t n) {
     extern void device_update();
     device_update();
 #endif
-    
+    printf("nemu: %d\n", nemu_state.state);
     if (nemu_state.state != NEMU_RUNNING) break;
   }
 
