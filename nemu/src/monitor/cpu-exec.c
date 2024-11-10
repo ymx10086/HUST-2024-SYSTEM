@@ -37,9 +37,9 @@ void cpu_exec(uint64_t n) {
       return;
     default: nemu_state.state = NEMU_RUNNING;
   }
-
   for (; n > 0; n --) {
     printf("N : %ld\n", n);
+    printf("NEMU_RUNNING : %d\n", NEMU_RUNNING);
     __attribute__((unused)) vaddr_t ori_pc = cpu.pc;
 
     /* Execute one instruction, including instruction fetch,
