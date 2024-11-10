@@ -5,7 +5,6 @@ FILE *log_fp = NULL;
 
 void init_log(const char *log_file) {
   if (log_file == NULL) return;
-  printf("open log file: %s\n", log_file);
   log_fp = fopen(log_file, "w");
   Assert(log_fp, "Can not open '%s'", log_file);
 }
