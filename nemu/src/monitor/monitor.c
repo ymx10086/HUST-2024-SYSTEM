@@ -65,7 +65,7 @@ static inline long load_img() {
 static inline void parse_args(int argc, char *argv[]) {
   int o;
   while ( (o = getopt(argc, argv, "-bl:d:a:")) != -1) {
-    printf("OPT : %s\n", *argv);
+    printf("OPT : %s\n", *argv + 1);
     // printf("OPT : %c\n", o);
     switch (o) {
       case 'b': is_batch_mode = true; break;
