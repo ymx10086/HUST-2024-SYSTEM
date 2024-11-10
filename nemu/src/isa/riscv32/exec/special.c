@@ -24,6 +24,8 @@ make_EHelper(nemu_trap) {
 
   rtl_exit(NEMU_END, cpu.pc, cpu.gpr[10]._32); // grp[10] is $a0
 
+  printf("nemu trap\n");
+
   print_asm("nemu trap");
   return;
 }
