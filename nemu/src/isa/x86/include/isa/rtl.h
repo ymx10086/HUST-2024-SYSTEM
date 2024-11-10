@@ -5,6 +5,19 @@
 
 /* RTL pseudo instructions */
 
+/**
+ * @brief Loads a value from a register into a destination variable with the specified width.
+ *
+ * This function is used to load a value from a register into a destination variable
+ * with the specified width. The width parameter determines the number of bytes to load.
+ *
+ * @param dest Pointer to the destination variable where the loaded value will be stored.
+ * @param r The register number from which the value will be loaded.
+ * @param width The width of the value to be loaded in bytes.
+ *
+ * @note This function assumes that the destination variable is large enough to hold the loaded value.
+ *       If the width parameter is not 1, 2, or 4, an assertion error will occur.
+ */
 static inline void rtl_lr(rtlreg_t* dest, int r, int width) {
   switch (width) {
     case 4: rtl_mv(dest, &reg_l(r)); return;
@@ -14,6 +27,13 @@ static inline void rtl_lr(rtlreg_t* dest, int r, int width) {
   }
 }
 
+/**
+ * Store the value from the source operand to the specified register.
+ *
+ * @param r     The register number to store the value to.
+ * @param src1  The source operand value to be stored.
+ * @param width The width of the source operand value in bytes.
+ */
 static inline void rtl_sr(int r, const rtlreg_t* src1, int width) {
   switch (width) {
     case 4: rtl_mv(&reg_l(r), src1); return;
