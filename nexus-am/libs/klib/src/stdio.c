@@ -11,7 +11,6 @@ int printf(const char *fmt, ...) {
 
   char out[MAXN]; 
   int length = vsprintf(out, fmt, vl);
-  out[length] = '\0';
   for(int i = 0; i < length; i++) {
     _putc(out[i]);
   }
@@ -88,9 +87,9 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       out[pos - 1] = *fmt;
   }
   if (pos < MAXN)
-    out[pos] = 0;
+    out[pos] = '\0';
   else if (MAXN)
-    out[MAXN - 1] = 0;
+    out[MAXN - 1] = '\0';
   return pos;
 }
 
