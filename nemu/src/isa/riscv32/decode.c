@@ -71,19 +71,19 @@ make_DHelper(S){
  *  imm[12] imm[10:5] rs2 rs1 imm[4:1] imm[11]
  */
 make_DHelper(B){
-  printf("B\n");
   decode_op_r(id_src, decinfo.isa.instr.rs1, true);
   decode_op_r(id_src2, decinfo.isa.instr.rs2, true);
   
   print_Dop(id_src->str, OP_STR_SIZE, "%s", reg_name(id_src->reg, 4));
   print_Dop(id_src2->str, OP_STR_SIZE, "%s", reg_name(id_src2->reg, 4));
 
-  int32_t offset = decinfo.isa.instr.simm12 << 12 | 
+  s0 = decinfo.isa.instr.simm12 << 12 | 
        decinfo.isa.instr.imm10_5 << 5 | 
        decinfo.isa.instr.imm4_1 << 1 | 
        decinfo.isa.instr.imm11 << 11;
-  decode_op_i(id_dest, offset, true);
+  rtl_add(&decinfo.jmp_pc, &s0, &cpu.pc);
 
+  print_Dop(id_dest->str, OP_STR_SIZE, "0x%x", s0);
 }
 
 /**
