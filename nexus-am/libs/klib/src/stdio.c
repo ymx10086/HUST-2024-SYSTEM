@@ -1,6 +1,13 @@
 #include "klib.h"
 #include <stdarg.h>
 
+#ifndef FALSE
+# define FALSE 0
+#endif
+#ifndef TRUE
+# define TRUE 1
+#endif
+
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
 #define MAXN 100000
@@ -20,8 +27,8 @@ int printf(const char *fmt, ...) {
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
-  bool format = FALSE;
-  bool longarg = FALSE;
+  int format = FALSE;
+  int longarg = FALSE;
   size_t pos = 0;
 
   for (; *fmt; fmt++) {
