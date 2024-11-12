@@ -81,9 +81,8 @@ make_DHelper(B){
        decinfo.isa.instr.imm10_5 << 5 | 
        decinfo.isa.instr.imm4_1 << 1 | 
        decinfo.isa.instr.imm11 << 11;
-  rtl_add(&decinfo.jmp_pc, &s0, &cpu.pc);
+  decode_op_i(id_dest, s0, true);
 
-  print_Dop(id_dest->str, OP_STR_SIZE, "0x%x", s0);
 }
 
 /**
