@@ -82,8 +82,8 @@ make_EHelper(jal) {
  * Execute the R-type instruction.
 */
 make_EHelper(R_instr){
+  printf("11111111111111");
   switch (decinfo.isa.instr.funct3) {
-    printf("11111111111111");
     case 0x0: // add | sub | mul
       switch (decinfo.isa.instr.funct7){
         case 0x0: // add
