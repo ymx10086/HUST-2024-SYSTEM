@@ -81,9 +81,9 @@ make_EHelper(jal) {
 /**
  * Execute the R-type instruction.
 */
-make_EHelper(R){
+make_EHelper(R_instr){
   switch (decinfo.isa.instr.funct3) {
-    case 0x0:
+    case 0x0: // add | sub | mul
       switch (decinfo.isa.instr.funct7){
         case 0x0: // add
           rtl_add(&id_dest->val, &id_src->val, &id_src2->val);
@@ -99,44 +99,134 @@ make_EHelper(R){
           break;
       }
       break;
-    case 0x1: // sll
+    case 0x1: // sll | mulh
       switch (decinfo.isa.instr.funct7){
         case 0x0: // sll
           rtl_shl(&id_dest->val, &id_src->val, &id_src2->val);
+          print_asm_template3(sll);
           break;
-        default:
-          assert(0);
+        default: // mulh
+          rtl_imul_hi(&id_dest->val, &id_src->val, &id_src2->val);
+          print_asm_template3(mulh);
+          break;
       }
       break;
-    case 0x2: // slt
-      rtl_setrelop(RELOP_LT, &id_dest->val, &id_src->val, &id_src2->val);
-      break;
-    case 0x3: // sltu
-      rtl_setrelop(RELOP_LTU, &id_dest->val, &id_src->val, &id_src2->val);
-      break;
-    case 0x4: // xor
-      rtl_xor(&id_dest->val, &id_src->val, &id_src2->val);
-      break;
-    case 0x5: // srl/sra
-      if (decinfo.isa.instr.funct7 == 0) {
-        rtl_shr(&id_dest->val, &id_src->val, &id_src2->val);
-      } else {
-        rtl_sar(&id_dest->val, &id_src->val, &id_src2->val);
+    case 0x2: // slt | mulhsu
+      switch (decinfo.isa.instr.funct7){
+        case 0x0: // slt
+          rtl_setrelop(RELOP_LT, &id_dest->val, &id_src->val, &id_src2->val);
+          print_asm_template3(slt);
+          break;
+        default: // mulhsu
+          rtl_imul_hi_u(&id_dest->val, &id_src->val, &id_src2->val);
+          print_asm_template3(mulhsu);
+          break;
       }
       break;
-    case 0x6: // or
-      rtl_or(&id_dest->val, &id_src->val, &id_src2->val);
+    case 0x3: // sltu | mulhu
+      switch (decinfo.isa.instr.funct7){
+        case 0x0: // sltu
+          rtl_setrelop(RELOP_LTU, &id_dest->val, &id_src->val, &id_src2->val);
+          print_asm_template3(sltu);
+          break;
+        default: // mulhu
+          rtl_imul_hi_u(&id_dest->val, &id_src->val, &id_src2->val);
+          print_asm_template3(mulhu);
+          break;
+      }
       break;
-    case 0x7: // and
-      rtl_and(&id_dest->val, &id_src->val, &id_src2->val);
+    case 0x4: // xor | div
+      switch (decinfo.isa.instr.funct7){
+        case 0x0: // xor
+          rtl_xor(&id_dest->val, &id_src->val, &id_src2->val);
+          print_asm_template3(xor);
+          break;
+        default: // div
+          rtl_idiv_q(&id_dest->val, &id_src->val, &id_src2->val);
+          print_asm_template3(div);
+          break;
+      }
+      break;
+    case 0x5: // srl | sra | divu
+      switch (decinfo.isa.instr.funct7){
+        case 0x0: // srl
+          rtl_shr(&id_dest->val, &id_src->val, &id_src2->val);
+          print_asm_template3(srl);
+          break;
+        case 0x20: // sra
+          rtl_sar(&id_dest->val, &id_src->val, &id_src2->val);
+          print_asm_template3(sra);
+          break;
+        default: // divu
+          rtl_idiv_q_u(&id_dest->val, &id_src->val, &id_src2->val);
+          print_asm_template3(divu);
+          break;
+      }
+      break;
+    case 0x6: // or | rem
+      switch (decinfo.isa.instr.funct7){
+        case 0x0: // or
+          rtl_or(&id_dest->val, &id_src->val, &id_src2->val);
+          print_asm_template3(or);
+          break;
+        default: // rem
+          rtl_idiv_r(&id_dest->val, &id_src->val, &id_src2->val);
+          print_asm_template3(rem);
+          break;
+      }
+      break;
+    case 0x7: // and | remu
+      switch (decinfo.isa.instr.funct7){
+        case 0x0: // and
+          rtl_and(&id_dest->val, &id_src->val, &id_src2->val);
+          print_asm_template3(and);
+          break;
+        default: // remu
+          rtl_idiv_r_u(&id_dest->val, &id_src->val, &id_src2->val);
+          print_asm_template3(remu);
+          break;
+      }
       break;
     default:
       assert(0);
   }
   rtl_sr(id_dest->reg, &id_dest->val, 4);
-
-  print_asm_template3(R);
 }
+
+/**
+ * Execute the B-type instruction.
+*/
+make_EHelper(B_instr){
+  switch (decinfo.isa.instr.funct3) {
+    case 0x0: // beq
+      rtl_jrelop(RELOP_EQ, &id_src->val, &id_src2->val, decinfo.jmp_pc);
+      print_asm_template2(beq);
+      break;
+    case 0x1: // bne
+      rtl_jrelop(RELOP_NE, &id_src->val, &id_src2->val, decinfo.jmp_pc);
+      print_asm_template2(bne);
+      break;
+    case 0x4: // blt
+      rtl_jrelop(RELOP_LT, &id_src->val, &id_src2->val, decinfo.jmp_pc);
+      print_asm_template2(blt);
+      break;
+    case 0x5: // bge
+      rtl_jrelop(RELOP_GE, &id_src->val, &id_src2->val, decinfo.jmp_pc);
+      print_asm_template2(bge);
+      break;
+    case 0x6: // bltu
+      rtl_jrelop(RELOP_LTU, &id_src->val, &id_src2->val, decinfo.jmp_pc);
+      print_asm_template2(bltu);
+      break;
+    case 0x7: // bgeu
+      rtl_jrelop(RELOP_GEU, &id_src->val, &id_src2->val, decinfo.jmp_pc);
+      print_asm_template2(bgeu);
+      break;
+    default:
+      assert(0);
+  }
+}
+
 
 make_EHelper(jalr){
   uint32_t addr = cpu.pc + 4;
