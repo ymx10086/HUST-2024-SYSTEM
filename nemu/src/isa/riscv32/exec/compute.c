@@ -7,6 +7,8 @@ make_EHelper(lui) {
 }
 
 make_EHelper(auipc) {
+  
+  printf("11111111111111");
   rtl_add(&id_dest->val, &cpu.pc, &id_src->val);
   rtl_sr(id_dest->reg, &id_dest->val, 4);
 
@@ -72,7 +74,6 @@ make_EHelper(I_instr){
  * Execute the J-type instruction.
 */
 make_EHelper(jal) {
-  printf("11111111111111");
   rtl_sr(id_dest->reg, &decinfo.seq_pc, 4);
   rtl_j(decinfo.seq_pc + id_src->val);
 
@@ -83,7 +84,6 @@ make_EHelper(jal) {
  * Execute the R-type instruction.
 */
 make_EHelper(R_instr){
-  printf("11111111111111");
   switch (decinfo.isa.instr.funct3) {
     case 0x0: // add | sub | mul
       switch (decinfo.isa.instr.funct7){
