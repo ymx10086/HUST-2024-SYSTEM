@@ -118,7 +118,7 @@ make_EHelper(R_instr){
           print_asm_template3(slt);
           break;
         default: // mulhsu
-          rtl_imul_hi_u(&id_dest->val, &id_src->val, &id_src2->val);
+          // rtl_imul_hi_u(&id_dest->val, &id_src->val, &id_src2->val);
           print_asm_template3(mulhsu);
           break;
       }
@@ -130,7 +130,7 @@ make_EHelper(R_instr){
           print_asm_template3(sltu);
           break;
         default: // mulhu
-          rtl_imul_hi_u(&id_dest->val, &id_src->val, &id_src2->val);
+          // rtl_imul_hi_u(&id_dest->val, &id_src->val, &id_src2->val);
           print_asm_template3(mulhu);
           break;
       }
@@ -158,7 +158,7 @@ make_EHelper(R_instr){
           print_asm_template3(sra);
           break;
         default: // divu
-          rtl_idiv_q_u(&id_dest->val, &id_src->val, &id_src2->val);
+          // rtl_idiv_q_u(&id_dest->val, &id_src->val, &id_src2->val);
           print_asm_template3(divu);
           break;
       }
@@ -182,7 +182,7 @@ make_EHelper(R_instr){
           print_asm_template3(and);
           break;
         default: // remu
-          rtl_idiv_r_u(&id_dest->val, &id_src->val, &id_src2->val);
+          // rtl_idiv_r_u(&id_dest->val, &id_src->val, &id_src2->val);
           print_asm_template3(remu);
           break;
       }
