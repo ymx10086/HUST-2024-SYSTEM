@@ -71,6 +71,7 @@ make_DHelper(S){
  *  imm[12] imm[10:5] rs2 rs1 imm[4:1] imm[11]
  */
 make_DHelper(B){
+  printf("B\n");
   decode_op_r(id_src, decinfo.isa.instr.rs1, true);
   decode_op_r(id_src2, decinfo.isa.instr.rs2, true);
   
