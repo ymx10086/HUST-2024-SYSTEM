@@ -29,7 +29,7 @@ make_EHelper(I_instr){
       rtl_add(&id_dest->val, &id_src->val, &id_src2->val);
       break;
     case 0x1: // slli
-      rtl_shl(&id_dest->val, &id_src->val, id_src2->val);
+      rtl_shl(&id_dest->val, &id_src->val, &id_src2->val);
       break;
     case 0x2: // slti
       rtl_setrelop(RELOP_LT, &id_dest->val, &id_src->val, &id_src2->val);
