@@ -204,6 +204,7 @@ make_EHelper(B_instr){
       print_asm_template2(beq);
       break;
     case 0x1: // bne
+      printf("id_src->val: %d, id_src2->val: %d\n", id_src->val, id_src2->val);
       rtl_jrelop(RELOP_NE, &id_src->val, &id_src2->val, decinfo.jmp_pc);
       print_asm_template2(bne);
       break;
