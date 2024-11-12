@@ -25,40 +25,43 @@ make_EHelper(auipc) {
  * Execute the I-type instruction.
 */
 make_EHelper(I_instr){
-   switch (decinfo.isa.instr.funct3) {
-    case 0b000: // addi
+  switch (decinfo.isa.instr.funct3) {
+    case 0x0: // addi
       rtl_add(&id_dest->val, &id_src->val, &id_src2->val);
       print_asm_template3(addi);
       break;
-    case 0b010: // slti
-      id_dest->val = (int32_t)id_src->val < (int32_t)id_src2->val;
-      print_asm_template3(slti);
-      break;
-    case 0b011: // sltiu
-      id_dest->val = (unsigned)id_src->val < (unsigned)id_src2->val;
-      print_asm_template3(sltiu);
-      break;
-    case 0b100: // xori
-      rtl_xor(&id_dest->val, &id_src->val, &id_src2->val);
-      print_asm_template3(xori);
-      break;
-    case 0b110: // ori
-      rtl_or(&id_dest->val, &id_src->val, &id_src2->val);
-      print_asm_template3(ori);
-      break;
-    case 0b111: // andi
-      rtl_and(&id_dest->val, &id_src->val, &id_src2->val);
-      print_asm_template3(andi);
-      break;
-    case 0b001: // slli
+    case 0x1: // slli
       rtl_shl(&id_dest->val, &id_src->val, &id_src2->val);
       print_asm_template3(slli);
       break;
-    case 0b101:
-      if((decinfo.isa.instr.funct7) == 0b0000000) // srli
-        {rtl_shr(&id_dest->val, &id_src->val, &id_src2->val);print_asm_template3(srli);}
-      else // srai
-        {rtl_sar(&id_dest->val, &id_src->val, &id_src2->val);print_asm_template3(srai);}
+    case 0x2: // slti
+      rtl_setrelop(RELOP_LT, &id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(slti);
+      break;
+    case 0x3: // sltiu
+      rtl_setrelop(RELOP_LTU, &id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(sltiu);
+      break;
+    case 0x4: // xori
+      rtl_xor(&id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(xori);
+      break;
+    case 0x5: // srli/srai
+      if((decinfo.isa.instr.funct7) == 0b0000000) {
+        rtl_shr(&id_dest->val, &id_src->val, &id_src2->val);
+        print_asm_template3(srli);
+      } else {
+        rtl_sar(&id_dest->val, &id_src->val, &id_src2->val);
+        print_asm_template3(srai);
+      }
+      break;
+    case 0x6: // ori
+      rtl_or(&id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(ori);
+      break;
+    case 0x7: // andi
+      rtl_and(&id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(andi);
       break;
     default:
       assert(0);
