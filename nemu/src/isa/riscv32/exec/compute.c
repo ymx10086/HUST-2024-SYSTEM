@@ -73,8 +73,11 @@ make_EHelper(I_instr){
  * Execute the J-type instruction.
 */
 make_EHelper(jal) {
-  rtl_sr(id_dest->reg, &decinfo.seq_pc, 4);
-  rtl_j(decinfo.seq_pc + id_src->val);
+  uint32_t addr = cpu.pc + 4;
+  rtl_sr(id_dest->reg, &addr, 4);
+
+  rtl_add(&decinfo.jmp_pc, &cpu.pc, &id_src->val);
+  rtl_j(decinfo.jmp_pc);
 
   print_asm_template2(jal);
 }
