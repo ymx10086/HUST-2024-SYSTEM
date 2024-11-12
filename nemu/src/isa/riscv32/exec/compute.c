@@ -29,7 +29,7 @@ make_EHelper(I_instr){
       rtl_add(&id_dest->val, &id_src->val, &id_src2->val);
       break;
     case 0x1: // slli
-      rtl_shli(&id_dest->val, &id_src->val, &id_src2->val);
+      rtl_shl(&id_dest->val, &id_src->val, &id_src2->val);
       break;
     case 0x2: // slti
       rtl_setrelop(RELOP_LT, &id_dest->val, &id_src->val, &id_src2->val);
@@ -42,9 +42,9 @@ make_EHelper(I_instr){
       break;
     case 0x5: // srli/srai
       if (decinfo.isa.instr.imm11 == 0) {
-        rtl_shri(&id_dest->val, &id_src->val, &id_src2->val);
+        rtl_shr(&id_dest->val, &id_src->val, &id_src2->val);
       } else {
-        rtl_sari(&id_dest->val, &id_src->val, &id_src2->val);
+        rtl_sar(&id_dest->val, &id_src->val, &id_src2->val);
       }
       break;
     case 0x6: // ori
