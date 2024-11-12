@@ -25,40 +25,43 @@ make_EHelper(auipc) {
  * Execute the I-type instruction.
 */
 make_EHelper(I_instr){
-switch (decinfo.isa.instr.funct3) {
-    case 0b000: // addi
+  switch (decinfo.isa.instr.funct3) {
+    case 0x0: // addi
       rtl_add(&id_dest->val, &id_src->val, &id_src2->val);
       print_asm_template3(addi);
       break;
-    case 0b010: // slti
-      id_dest->val = (int32_t)id_src->val < (int32_t)id_src2->val;
-      print_asm_template3(slti);
-      break;
-    case 0b011: // sltiu
-      id_dest->val = (unsigned)id_src->val < (unsigned)id_src2->val;
-      print_asm_template3(sltiu);
-      break;
-    case 0b100: // xori
-      rtl_xor(&id_dest->val, &id_src->val, &id_src2->val);
-      print_asm_template3(xori);
-      break;
-    case 0b110: // ori
-      rtl_or(&id_dest->val, &id_src->val, &id_src2->val);
-      print_asm_template3(ori);
-      break;
-    case 0b111: // andi
-      rtl_and(&id_dest->val, &id_src->val, &id_src2->val);
-      print_asm_template3(andi);
-      break;
-    case 0b001: // slli
+    case 0x1: // slli
       rtl_shl(&id_dest->val, &id_src->val, &id_src2->val);
       print_asm_template3(slli);
       break;
-    case 0b101:
-      if((decinfo.isa.instr.funct7) == 0b0000000) // srli
-        {rtl_shr(&id_dest->val, &id_src->val, &id_src2->val);print_asm_template3(srli);}
-      else // srai
-        {rtl_sar(&id_dest->val, &id_src->val, &id_src2->val);print_asm_template3(srai);}
+    case 0x2: // slti
+      rtl_setrelop(RELOP_LT, &id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(slti);
+      break;
+    case 0x3: // sltiu
+      rtl_setrelop(RELOP_LTU, &id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(sltiu);
+      break;
+    case 0x4: // xori
+      rtl_xor(&id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(xori);
+      break;
+    case 0x5: // srli/srai
+      if (decinfo.isa.instr.imm11 == 0) {
+        rtl_shr(&id_dest->val, &id_src->val, &id_src2->val);
+        print_asm_template3(srli);
+      } else {
+        rtl_sar(&id_dest->val, &id_src->val, &id_src2->val);
+        print_asm_template3(srai);
+      }
+      break;
+    case 0x6: // ori
+      rtl_or(&id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(ori);
+      break;
+    case 0x7: // andi
+      rtl_and(&id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(andi);
       break;
     default:
       assert(0);
@@ -80,113 +83,104 @@ make_EHelper(jal) {
  * Execute the R-type instruction.
 */
 make_EHelper(R_instr){
-  switch (decinfo.isa.instr.funct3) {
-    case 0x0: // add | sub | mul
-      switch (decinfo.isa.instr.funct7){
-        case 0x0: // add
-          rtl_add(&id_dest->val, &id_src->val, &id_src2->val);
-          print_asm_template3(add);
-          break;
-        case 0x20: // sub
-          rtl_sub(&id_dest->val, &id_src->val, &id_src2->val);
-          print_asm_template3(sub);
-          break;
-        default: // mul
-          rtl_imul_lo(&id_dest->val, &id_src->val, &id_src2->val);
-          print_asm_template3(mul);
-          break;
-      }
-      break;
-    case 0x1: // sll | mulh
-      switch (decinfo.isa.instr.funct7){
-        case 0x0: // sll
-          rtl_shl(&id_dest->val, &id_src->val, &id_src2->val);
-          print_asm_template3(sll);
-          break;
-        default: // mulh
-          rtl_imul_hi(&id_dest->val, &id_src->val, &id_src2->val);
-          print_asm_template3(mulh);
-          break;
-      }
-      break;
-    case 0x2: // slt | mulhsu
-      switch (decinfo.isa.instr.funct7){
-        case 0x0: // slt
-          rtl_setrelop(RELOP_LT, &id_dest->val, &id_src->val, &id_src2->val);
-          print_asm_template3(slt);
-          break;
-        default: // mulhsu
-          // rtl_imul_hi_u(&id_dest->val, &id_src->val, &id_src2->val);
-          print_asm_template3(mulhsu);
-          break;
-      }
-      break;
-    case 0x3: // sltu | mulhu
-      switch (decinfo.isa.instr.funct7){
-        case 0x0: // sltu
-          rtl_setrelop(RELOP_LTU, &id_dest->val, &id_src->val, &id_src2->val);
-          print_asm_template3(sltu);
-          break;
-        default: // mulhu
-          // rtl_imul_hi_u(&id_dest->val, &id_src->val, &id_src2->val);
-          print_asm_template3(mulhu);
-          break;
-      }
-      break;
-    case 0x4: // xor | div
-      switch (decinfo.isa.instr.funct7){
-        case 0x0: // xor
-          rtl_xor(&id_dest->val, &id_src->val, &id_src2->val);
-          print_asm_template3(xor);
-          break;
-        default: // div
-          rtl_idiv_q(&id_dest->val, &id_src->val, &id_src2->val);
-          print_asm_template3(div);
-          break;
-      }
-      break;
-    case 0x5: // srl | sra | divu
-      switch (decinfo.isa.instr.funct7){
-        case 0x0: // srl
-          rtl_shr(&id_dest->val, &id_src->val, &id_src2->val);
-          print_asm_template3(srl);
-          break;
-        case 0x20: // sra
-          rtl_sar(&id_dest->val, &id_src->val, &id_src2->val);
-          print_asm_template3(sra);
-          break;
-        default: // divu
-          // rtl_idiv_q_u(&id_dest->val, &id_src->val, &id_src2->val);
-          print_asm_template3(divu);
-          break;
-      }
-      break;
-    case 0x6: // or | rem
-      switch (decinfo.isa.instr.funct7){
-        case 0x0: // or
-          rtl_or(&id_dest->val, &id_src->val, &id_src2->val);
-          print_asm_template3(or);
-          break;
-        default: // rem
-          rtl_idiv_r(&id_dest->val, &id_src->val, &id_src2->val);
-          print_asm_template3(rem);
-          break;
-      }
-      break;
-    case 0x7: // and | remu
-      switch (decinfo.isa.instr.funct7){
-        case 0x0: // and
-          rtl_and(&id_dest->val, &id_src->val, &id_src2->val);
-          print_asm_template3(and);
-          break;
-        default: // remu
-          // rtl_idiv_r_u(&id_dest->val, &id_src->val, &id_src2->val);
-          print_asm_template3(remu);
-          break;
-      }
-      break;
-    default:
-      assert(0);
+  switch (decinfo.isa.instr.funct3){
+  case 0b000: {
+    if(decinfo.isa.instr.funct7 == 0x00){       // add
+      rtl_add(&id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(add);
+      
+    }
+    else if(decinfo.isa.instr.funct7 == 0x20){  // sub
+      rtl_sub(&id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(sub);
+    }
+    else{                                       // mul
+      rtl_imul_lo(&id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(mul);
+    }
+    break;
+  }
+  case 0b001: {
+    if(decinfo.isa.instr.funct7 == 0x00){       // sll
+      rtl_shl(&id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(sll);
+
+    }
+    else{                                       // mulh
+      rtl_imul_hi(&id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(mulh);
+    }
+    break;
+  }
+  case 0b010: {
+    if(decinfo.isa.instr.funct7 == 0x00){       // slt
+      id_dest->val = (signed)id_src->val < (signed)id_src2->val;
+      print_asm_template3(slt);
+    }
+    else{                                       // mulhsu
+      TODO();
+    }
+    break;
+  }
+  case 0b011: {
+    if(decinfo.isa.instr.funct7 == 0x00){       // sltu
+      id_dest->val = (unsigned)id_src->val < (unsigned)id_src2->val;
+      print_asm_template3(sltu);
+    }
+    else{                                       // mulhu
+      TODO();
+    }
+    break;
+  }
+  case 0b100: {
+  if(decinfo.isa.instr.funct7 == 0x00){         // xor
+      rtl_xor(&id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(xor);
+    }
+  else{                                         // div
+      rtl_idiv_q(&id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(div);
+    }
+    break;
+  }
+  case 0b101: {
+    if(decinfo.isa.instr.funct7 == 0x00){       // srl
+      rtl_shr(&id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(srl);
+    }
+    else if(decinfo.isa.instr.funct7 == 0x20){  // sra
+      rtl_sar(&id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(sra);
+    }
+    else{                                       // divu
+      rtl_div_q(&id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(divu);
+    }
+    break;
+  }
+  case 0b110: {
+    if(decinfo.isa.instr.funct7 == 0x00){       // or
+      rtl_or(&id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(or);
+    }
+    else{                                       // rem
+      rtl_idiv_r(&id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(rem);
+    }
+    break;
+  }
+case 0b111: {                                       
+    if(decinfo.isa.instr.funct7 == 0x00){       // and
+      rtl_and(&id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(and);
+    }
+    else{                                       // remu
+      rtl_div_r(&id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(remu);
+    }
+    break;
+  }
+  default: break;
   }
   rtl_sr(id_dest->reg, &id_dest->val, 4);
 }
