@@ -83,6 +83,7 @@ make_EHelper(jal) {
 */
 make_EHelper(R_instr){
   switch (decinfo.isa.instr.funct3) {
+    printf("11111111111111");
     case 0x0: // add | sub | mul
       switch (decinfo.isa.instr.funct7){
         case 0x0: // add
