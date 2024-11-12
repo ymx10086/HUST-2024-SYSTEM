@@ -73,6 +73,10 @@ make_EHelper(I_instr){
  * Execute the J-type instruction.
 */
 make_EHelper(jal) {
+  // rtl_sr(id_dest->reg, &decinfo.seq_pc, 4);
+  // rtl_j(decinfo.seq_pc + id_src->val);
+
+  // print_asm_template2(jal);
   uint32_t addr = cpu.pc + 4;
   rtl_sr(id_dest->reg, &addr, 4);
 
@@ -80,6 +84,18 @@ make_EHelper(jal) {
   rtl_j(decinfo.jmp_pc);
 
   print_asm_template2(jal);
+}
+
+make_EHelper(jalr){
+  uint32_t addr = cpu.pc + 4;
+  rtl_sr(id_dest->reg, &addr, 4);
+
+  decinfo.jmp_pc = (id_src->val+id_src2->val)&(~1);
+  rtl_j(decinfo.jmp_pc);
+
+  difftest_skip_dut(1, 2); 
+
+  print_asm_template2(jalr);
 }
 
 /**
@@ -232,18 +248,4 @@ make_EHelper(B_instr){
       break;
   }
 }
-
-
-make_EHelper(jalr){
-  uint32_t addr = cpu.pc + 4;
-  rtl_sr(id_dest->reg, &addr, 4);
-
-  decinfo.jmp_pc = (id_src->val+id_src2->val)&(~1);
-  rtl_j(decinfo.jmp_pc);
-
-  difftest_skip_dut(1, 2); 
-
-  print_asm_template2(jalr);
-}
-
 
