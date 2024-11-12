@@ -110,12 +110,10 @@ make_DHelper(J){
         (decinfo.isa.instr.imm19_12 << 12) | 
         (decinfo.isa.instr.imm11_ << 11) | 
         (decinfo.isa.instr.imm10_1 << 1);   
-  s0 = (uint32_t)((int32_t)(s0 << 11) >> 11);
   decode_op_i(id_src, s0, true);
   decode_op_r(id_dest, decinfo.isa.instr.rd, false);
 
-  print_Dop(id_src->str, OP_STR_SIZE, "0x%x", id_src->val);
-  print_Dop(id_dest->str, OP_STR_SIZE, "0x%x", id_dest->reg);
+  print_Dop(id_src->str, OP_STR_SIZE, "0x%x", s0);
 }
 
 make_DHelper(ld) {
