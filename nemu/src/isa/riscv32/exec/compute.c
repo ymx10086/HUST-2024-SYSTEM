@@ -8,7 +8,6 @@ make_EHelper(lui) {
 
 make_EHelper(auipc) {
   
-  printf("11111111111111");
   rtl_add(&id_dest->val, &cpu.pc, &id_src->val);
   rtl_sr(id_dest->reg, &id_dest->val, 4);
 
