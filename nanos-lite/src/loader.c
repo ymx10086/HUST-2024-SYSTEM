@@ -15,7 +15,7 @@ extern size_t ramdisk_write(const void*, size_t, size_t);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
     //TODO();
-    printf("filename: %s\n", filename);
+   printf("=========================================: %s\n", filename);
    Elf_Ehdr ehdr;      // read the ELF Header
    ramdisk_read(&ehdr,0,sizeof(Elf_Ehdr));
    assert((*(uint32_t *)ehdr.e_ident == 0x464c457f));
