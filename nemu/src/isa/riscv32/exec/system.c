@@ -27,13 +27,11 @@ make_EHelper(syscall){
   Instr instr = decinfo.isa.instr;
   switch (instr.funct3){
     case 0x0: // ecall
-      if((instr.val & ~(0x7f))==0){
-                raise_intr(reg_l(17), decinfo.seq_pc-4);
-            }
-    else if(instr.val == 0x10200073){
+      if(!(instr.val & ~(0x7f))) raise_intr(reg_l(17), decinfo.seq_pc-4);
+      else if(instr.val == 0x10200073){
         decinfo.jmp_pc = decinfo.isa.sepc + 4;
         rtl_j(decinfo.jmp_pc);
-    }
+      }
       else{
         printf("syscall: %x\n", instr.val);
         panic("Unfinished syscall");
