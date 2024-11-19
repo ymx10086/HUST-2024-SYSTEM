@@ -33,6 +33,7 @@ int main() {
   Log("Finish initialization");
 
 #ifdef HAS_CTE
+  printf("Initializing interrupt/exception handler...\n");
   _yield();
 #endif
 
