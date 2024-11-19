@@ -14,14 +14,12 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   Elf_Ehdr ehdr;
   int fd = sizeof(Elf_Ehdr);
   ramdisk_read(&ehdr, 0, fd);
+  Elf_Phdr phdr[ehdr.e_phnum];
+  ramdisk_read(phdr, ehdr.e_phoff, sizeof(Elf_Phdr)*ehdr.e_phnum);
   for (int i = 0; i < ehdr.e_phnum; i++) {
-    Elf_Phdr phdr;
-    ramdisk_read(&phdr, ehdr.e_phoff + i * ehdr.e_phentsize, sizeof(Elf_Phdr));
-    if (phdr.p_type == PT_LOAD) {
-      ramdisk_read((void *)phdr.p_vaddr, phdr.p_offset, phdr.p_filesz);
-      if (phdr.p_filesz < phdr.p_memsz) {
-        memset((void *)(phdr.p_vaddr + phdr.p_filesz), 0, phdr.p_memsz - phdr.p_filesz);
-      }
+    if (phdr[i].p_type == PT_LOAD) {
+      ramdisk_read((void*)phdr[i].p_vaddr, phdr[i].p_offset, phdr[i].p_memsz);
+      memset((void*)(phdr[i].p_vaddr+phdr[i].p_filesz), 0, phdr[i].p_memsz - phdr[i].p_filesz);
     }
   }
 
