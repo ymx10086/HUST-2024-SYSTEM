@@ -2,7 +2,7 @@
 
 extern void raise_intr(uint32_t NO, vaddr_t epc);
 
-int32_t read_csr(int csr_num) {
+int32_t readcsr(int csr_num) {
   switch (csr_num) {
     case 0x105: return decinfo.isa.stvec;
     case 0x142: return decinfo.isa.scause;
@@ -12,7 +12,7 @@ int32_t read_csr(int csr_num) {
   }
 }
 
-int32_t write_csr(int csr_num, int32_t val) {
+int32_t writecsr(int csr_num, int32_t val) {
   switch (csr_num) {
     case 0x105: decinfo.isa.stvec = val; break;
     case 0x142: decinfo.isa.scause = val; break;
