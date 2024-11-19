@@ -17,3 +17,4 @@ make_EHelper(R_instr);
 make_EHelper(B_instr);
 make_EHelper(jal);
 make_EHelper(jalr);
+make_EHelper(syscall);
