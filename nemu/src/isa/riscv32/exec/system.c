@@ -24,11 +24,10 @@ int32_t write_csr(int csr_num, int32_t val) {
 }
 
 make_EHelper(syscall){
-    Instr instr = decinfo.isa.instr;
-    switch(instr.funct3){
-        //ecall
-        case 0b0:
-            if((instr.val & ~(0x7f))==0){
+  Instr instr = decinfo.isa.instr;
+  switch (instr.funct3){
+    case 0x0: // ecall
+      if((instr.val & ~(0x7f))==0){
                 raise_intr(reg_l(17), decinfo.seq_pc-4);
             }
             else if(instr.val == 0x10200073){
@@ -39,18 +38,17 @@ make_EHelper(syscall){
                 assert(0 && "system code unfinish");
             }
             break;
-        // csrrw
-        case 0b001:
-            s0 = readcsr(instr.csr);
-            writecsr(instr.csr, id_src->val);
-            rtl_sr(id_dest->reg, &s0, 4);
-            break;
-        case 0b010:
-            s0 = readcsr(instr.csr);
-            writecsr(instr.csr, s0 | id_src->val);
-            rtl_sr(id_dest->reg, &s0, 4);
-            break;
-        default:
-            assert(0 && "Unfinished system op");
-    }
+    case 0x1: // csrrw
+      s0 = read_csr(instr.csr);
+      write_csr(instr.csr, id_src->val);
+      rtl_sr(id_dest->reg, &s0, 4);
+      break;
+    case 0x2: // csrrs
+      s0 = read_csr(instr.csr);
+      write_csr(instr.csr, s0 | id_src->val);
+      rtl_sr(id_dest->reg, &s0, 4);
+      break;
+    default:
+    panic("Unfinished syscall");
+  }
 }
