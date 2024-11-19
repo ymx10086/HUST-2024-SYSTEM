@@ -10,8 +10,23 @@
 #endif
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
-  TODO();
-  return 0;
+  //pa3.2
+   Elf_Ehdr ehdr;      // read the ELF Header
+   ramdisk_read(&ehdr,0,sizeof(Elf_Ehdr));
+   assert((*(uint32_t *)ehdr.e_ident == 0x464c457f));
+   for(size_t i=0;i<ehdr.e_phnum;i++)
+   {
+    	Elf_Phdr phdr;
+    	ramdisk_read(&phdr, ehdr.e_phoff + i*ehdr.e_phentsize, sizeof(Elf_Phdr));
+    	if(phdr.p_type==PT_LOAD)
+    	{
+
+    		ramdisk_read((void*)phdr.p_vaddr,phdr.p_offset,phdr.p_filesz);
+    		memset((void *)(phdr.p_vaddr+phdr.p_filesz),0,phdr.p_memsz-phdr.p_filesz);
+    	}
+   }
+   return ehdr.e_entry;
+
 }
 
 void naive_uload(PCB *pcb, const char *filename) {
