@@ -1,4 +1,5 @@
 #include "proc.h"
+#include "fs.h"
 #include <elf.h>
 
 #ifdef __ISA_AM_NATIVE__
