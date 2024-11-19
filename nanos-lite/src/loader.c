@@ -10,6 +10,9 @@
 # define Elf_Phdr Elf32_Phdr
 #endif
 
+extern size_t ramdisk_read(void *, size_t, size_t);
+extern size_t ramdisk_write(const void*, size_t, size_t);
+
 static uintptr_t loader(PCB *pcb, const char *filename) {
   //pa3.2
    Elf_Ehdr ehdr;      // read the ELF Header
