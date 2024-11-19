@@ -30,14 +30,15 @@ make_EHelper(syscall){
       if((instr.val & ~(0x7f))==0){
                 raise_intr(reg_l(17), decinfo.seq_pc-4);
             }
-            else if(instr.val == 0x10200073){
-                decinfo.jmp_pc = decinfo.isa.sepc + 4;
-                rtl_j(decinfo.jmp_pc);
-            }
-            else{
-                assert(0 && "system code unfinish");
-            }
-            break;
+    else if(instr.val == 0x10200073){
+        decinfo.jmp_pc = decinfo.isa.sepc + 4;
+        rtl_j(decinfo.jmp_pc);
+    }
+      else{
+        printf("syscall: %x\n", instr.val);
+        panic("Unfinished syscall");
+     }
+      break;
     case 0x1: // csrrw
       s0 = read_csr(instr.csr);
       write_csr(instr.csr, id_src->val);
