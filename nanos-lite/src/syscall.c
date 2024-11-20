@@ -43,11 +43,11 @@ void sys_exit(int code) {
 
 int sys_write(int fd, void *buf, size_t count) {
   // printf("%s\n", (char*)buf);
-  if(fd == 1 || fd == 2) {
+  // if(fd == 1 || fd == 2) {
     for(int i = 0; i < count; i++) {
       _putc(((char*)buf)[i]);
     }
     return count;
-  }
+  // }
   return 0;
 }
