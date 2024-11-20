@@ -103,22 +103,22 @@ make_EHelper(jalr){
 */
 make_EHelper(R_instr){
   switch (decinfo.isa.instr.funct3) {
- case 0b000: {
-    if(decinfo.isa.instr.funct7 == 0x00){       // add
-      rtl_add(&id_dest->val, &id_src->val, &id_src2->val);
-      print_asm_template3(add);
-      
-    }
-    else if(decinfo.isa.instr.funct7 == 0x20){  // sub
-      rtl_sub(&id_dest->val, &id_src->val, &id_src2->val);
-      print_asm_template3(sub);
-    }
-    else{                                       // mul
-      rtl_imul_lo(&id_dest->val, &id_src->val, &id_src2->val);
-      print_asm_template3(mul);
-    }
-    break;
-  }
+    case 0x0: // add | sub | mul
+      switch (decinfo.isa.instr.funct7){
+        case 0x0: // add
+          rtl_add(&id_dest->val, &id_src->val, &id_src2->val);
+          print_asm_template3(add);
+          break;
+        case 0x20: // sub
+          rtl_sub(&id_dest->val, &id_src->val, &id_src2->val);
+          print_asm_template3(sub);
+          break;
+        default: // mul
+          rtl_imul_lo(&id_dest->val, &id_src->val, &id_src2->val);
+          print_asm_template3(mul);
+          break;
+      }
+      break;
     case 0x1: // sll | mulh
       switch (decinfo.isa.instr.funct7){
         case 0x0: // sll
@@ -134,7 +134,7 @@ make_EHelper(R_instr){
     case 0x2: // slt | mulhsu
       switch (decinfo.isa.instr.funct7){
         case 0x0: // slt
-          rtl_setrelop(RELOP_LT, &id_dest->val, &id_src->val, &id_src2->val);
+          id_dest->val = (signed)id_src->val < (signed)id_src2->val;
           print_asm_template3(slt);
           break;
         default: // mulhsu
