@@ -203,7 +203,7 @@ make_EHelper(R_instr){
           print_asm_template3(and);
           break;
         default: // remu
-          rtl_div_r_u(&id_dest->val, &id_src->val, &id_src2->val);
+          rtl_div_r(&id_dest->val, &id_src->val, &id_src2->val);
           print_asm_template3(remu);
           break;
       }
