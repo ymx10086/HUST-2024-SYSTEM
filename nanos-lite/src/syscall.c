@@ -19,6 +19,9 @@ _Context* do_syscall(_Context *c) {
     case SYS_exit:
       sys_exit(a[1]);
       break;
+    case SYS_write:
+      c->GPRx = sys_write(a[1], (void*)(a[2]), a[3]);
+      break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
 
@@ -31,4 +34,14 @@ void sys_yield() {
 
 void sys_exit(int code) {
   _halt(code);
+}
+
+int sys_write(int fd, void *buf, size_t count) {
+  if(fd == 1 || fd == 2) {
+    for(int i = 0; i < count; i++) {
+      _putc(((char*)buf)[i]);
+    }
+    return count;
+  }
+  return 0;
 }
