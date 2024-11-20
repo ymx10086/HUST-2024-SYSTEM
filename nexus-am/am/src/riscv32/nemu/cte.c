@@ -10,7 +10,17 @@ _Context* __am_irq_handle(_Context *c) {
     printf("c->cause = %d\n", c->cause);
     switch (c->cause) {
       case -1: ev.event = _EVENT_YIELD; break;
-      case 0: case 1: case 2: case 3: case 4: ev.event = _EVENT_SYSCALL; break;
+      case 0: // exit
+      case 1: // yield
+      case 2: // open
+      case 3: // read
+      case 4: // write
+      case 7: // close
+      case 8: // lseek
+      case 9: // sbrk
+      case 13: // execve
+          ev.event = _EVENT_SYSCALL;
+          break;
       default: ev.event = _EVENT_ERROR; break;
     }
 
