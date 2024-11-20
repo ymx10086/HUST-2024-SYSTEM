@@ -12,7 +12,7 @@ _Context* do_syscall(_Context *c) {
   a[2] = c->GPR3;
   a[3] = c->GPR4;
 
-  // printf("a[0] = %d\n", a[0]);
+  printf("a[0] = %d\n", a[0]);
   switch (a[0]) {
    
     case SYS_yield:
@@ -25,7 +25,6 @@ _Context* do_syscall(_Context *c) {
       break;
     case SYS_write:
       // printf("SYS_write\n");
-      printf("a[1] = %d\n", a[1]);
       c->GPRx = sys_write(a[1], (void*)(a[2]), a[3]);
       break;
     default: panic("Unhandled syscall ID = %d", a[0]);
