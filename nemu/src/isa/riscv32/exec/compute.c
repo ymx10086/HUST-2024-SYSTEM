@@ -134,7 +134,7 @@ make_EHelper(R_instr){
     case 0x2: // slt | mulhsu
       switch (decinfo.isa.instr.funct7){
         case 0x0: // slt
-          id_dest->val = (signed)id_src->val < (signed)id_src2->val;
+          rtl_setrelop(RELOP_LT, &id_dest->val, &id_src->val, &id_src2->val);
           print_asm_template3(slt);
           break;
         default: // mulhsu
@@ -179,6 +179,7 @@ make_EHelper(R_instr){
           break;
         default: // divu
           // rtl_idiv_q_u(&id_dest->val, &id_src->val, &id_src2->val);
+          rtl_div_q(&id_dest->val, &id_src->val, &id_src2->val);
           print_asm_template3(divu);
           break;
       }
