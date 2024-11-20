@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 int main() {
-  write(1, "Hello World!\n", 13);
+  // write(1, "Hello World!\n", 13);
   printf("Hello World from Navy-apps for the 2th time!\n");
   // int a = a+ 1;
   // int i = 2;
