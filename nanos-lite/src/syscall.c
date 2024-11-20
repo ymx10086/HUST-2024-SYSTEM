@@ -14,6 +14,7 @@ _Context* do_syscall(_Context *c) {
 
   switch (a[0]) {
     case SYS_yield:
+      printf("SYS_yield\n");
       sys_yield();
       c->GPRx = 0;
       break;
@@ -39,7 +40,7 @@ void sys_exit(int code) {
 }
 
 int sys_write(int fd, void *buf, size_t count) {
-  printf("%s\n", (char*)buf);
+  // printf("%s\n", (char*)buf);
   if(fd == 1 || fd == 2) {
     for(int i = 0; i < count; i++) {
       _putc(((char*)buf)[i]);
