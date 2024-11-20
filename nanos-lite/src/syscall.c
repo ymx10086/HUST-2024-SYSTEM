@@ -3,6 +3,7 @@
 
 void sys_yield();
 void sys_exit(int code);
+int sys_write(int fd, void *buf, size_t count);
 
 _Context* do_syscall(_Context *c) {
   uintptr_t a[4];
