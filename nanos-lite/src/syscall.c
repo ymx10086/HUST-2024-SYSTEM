@@ -1,9 +1,12 @@
 #include "common.h"
 #include "syscall.h"
 
+static int proc_interrupt;
+
 void sys_yield();
 void sys_exit(int code);
 int sys_write(int fd, void *buf, size_t count);
+int sys_brk(intptr_t addr);
 
 _Context* do_syscall(_Context *c) {
   uintptr_t a[4];
@@ -27,6 +30,9 @@ _Context* do_syscall(_Context *c) {
       // printf("SYS_write\n");
       c->GPRx = sys_write(a[1], (void*)(a[2]), a[3]);
       break;
+    case SYS_brk:
+      c->GPRx = sys_brk(a[1]);
+      break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
 
@@ -48,5 +54,10 @@ int sys_write(int fd, void *buf, size_t count) {
     }
     return count;
   }
+  return 0;
+}
+
+int sys_brk(intptr_t addr) {
+  proc_interrupt = addr;
   return 0;
 }
