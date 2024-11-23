@@ -65,10 +65,10 @@ int _write(int fd, void *buf, size_t count) {
 
 extern uint32_t _end;
 void *_sbrk(intptr_t increment) {
-  static uint32_t proc_interrupt = &_end;
-  int ret = proc_interrupt;
-  if(!_syscall_(SYS_brk, proc_interrupt + increment, 0, 0)){
-    proc_interrupt += increment;
+  static int program_break = &_end;
+  int ret = program_break;
+  if(!_syscall_(SYS_brk, program_break + increment, 0, 0)){
+    program_break += increment;
     return (void *)ret;
   }
   return (void *)-1;

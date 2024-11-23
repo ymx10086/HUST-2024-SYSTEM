@@ -1,7 +1,7 @@
 #include "common.h"
 #include "syscall.h"
 
-static int proc_interrupt;
+static int program_break;
 
 void sys_yield();
 void sys_exit(int code);
@@ -58,6 +58,6 @@ int sys_write(int fd, void *buf, size_t count) {
 }
 
 int sys_brk(intptr_t addr) {
-  proc_interrupt = addr;
+  program_break = addr;
   return 0;
 }
