@@ -15,6 +15,7 @@ _Context* __am_irq_handle(_Context *c) {
       case 2: // open
       case 3: // read
       case 4: // write
+      case 9: // brk
           ev.event = _EVENT_SYSCALL;
           break;
       default: ev.event = _EVENT_ERROR; break;
