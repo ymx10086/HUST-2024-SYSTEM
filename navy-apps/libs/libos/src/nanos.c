@@ -65,8 +65,8 @@ int _write(int fd, void *buf, size_t count) {
 
 extern uint32_t _end;
 void *_sbrk(intptr_t increment) {
-  static int program_break = &_end;
-  int ret = program_break;
+  static int program_break;
+  int ret = 0;
   if(!_syscall_(SYS_brk, program_break + increment, 0, 0)){
     program_break += increment;
     return (void *)ret;
