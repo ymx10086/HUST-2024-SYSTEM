@@ -3,6 +3,12 @@
 
 static int program_break;
 
+extern int fs_open(const char *pathname, int flags, int mode);
+extern int fs_read(int fd, void *buf, size_t count);
+extern int fs_write(int fd, void *buf, size_t count);
+extern int fs_lseek(int fd, size_t offset, int whence);
+extern int fs_close(int fd);
+
 void sys_yield();
 void sys_exit(int code);
 int sys_write(int fd, void *buf, size_t count);
