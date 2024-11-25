@@ -28,7 +28,7 @@ void init_proc() {
 
   // load program here
   // naive_uload(NULL, NULL);
-  naive_uload(NULL, "/bin/pal");
+  naive_uload(NULL, "/bin/bmptest");
 
 }
 
