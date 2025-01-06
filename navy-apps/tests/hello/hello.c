@@ -5,7 +5,7 @@ int main() {
   write(1, "Hello World!\n", 13);
   int i = 2;
   volatile int j = 0;
-  for(int j = 0; j < 10000; j ++) {
+  for(int k = 0; k < 10000; k ++) {
     j ++;
     if (j == 100) {
       printf("Hello World from Navy-apps for the %dth time!\n", i++);
